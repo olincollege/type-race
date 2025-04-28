@@ -1,80 +1,56 @@
-"Class definitions for view"
+"""
+Class definitions for the view component of a typing game.
+
+Defines an abstract TextView class that sets up and manages 
+the graphical display for the game using Pygame.
+"""
+
 import pygame
-
 from abc import ABC, abstractmethod
-
 
 class TextView(ABC):
     """
-    Abstract base class for a Tic Tac Toe
-      game view.
+    Abstract base class for the game's visual interface.
 
-    This class defines the interface for a Tic
-      Tac Toe view, which is responsible
-    for displaying the game board to the player.
-    Subclasses must implement the `draw`
-    method to define how the board is presented.
+    Provides a framework for creating and managing the game's display window.
+    Subclasses must implement additional drawing functionality as needed.
     """
 
     def __init__(self, player):
         """
-        Initialize the Tic Tac Toe view with a game board.
+        Initialize the TextView with a reference to the player or game logic.
 
         Args:
-            board: An instance of a board class that
-            represents the Tic Tac Toe game board.
+            player: An object representing the player or the game state manager.
         """
         self._player = player
-        pygame.init()
 
     @property
     def player(self):
         """
-        Get the current game board.
+        Return the player or game logic object associated with this view.
 
         Returns:
-            The current state of the game board.
+            The player or game state object.
         """
         return self._player
 
-    @abstractmethod
-    def draw(self):
+    def start(self):
         """
-        Abstract method to draw the game board.
+        Initialize the Pygame window and display a basic start screen.
 
-        Subclasses must implement this method to
-        define how the game board is displayed
-        to the player.
+        Sets up the screen size, background color, and draws initial elements
+        (e.g., a colored rectangle). This method prepares the visual environment
+        where the rest of the game will be displayed.
         """
-
-
-class GameScreen(TextView):
-    """
-    A text-based view for a Tic Tac Toe game.
-
-    This view displays the game board and indicates
-    whose turn it is using text output.
-    """
-
-    def draw(self):
-        """
-        Display the current game board and indicate
-        the next player's turn.
-
-        This method prints the current state of the
-          game board and informs the player
-        whose turn it is to make the next move.
-        """
-
-        # Set up display (this is your view)
+        pygame.init()
         screen_width = 800
         screen_height = 600
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("My Game View")
-        # Fill screen with a background color
-        screen.fill((0, 0, 0))  # black
+        screen.fill((0, 0, 0))  # Fill background with black
 
-        pygame.draw.rect(screen, (255, 0, 0), (100, 100, 50, 50))  # red square
+        # Draw a placeholder red square
+        pygame.draw.rect(screen, (255, 0, 0), (100, 100, 50, 50))
 
-        # Update the screen
         pygame.display.flip()
