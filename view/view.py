@@ -57,7 +57,7 @@ class GUIView(TypeRaceView):
         self._screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("My Game View")
 
-        self._font = pygame.font.Font(None, 32)
+        self._font = pygame.font.SysFont('dejavusansmono', 32)
         self._white = (255, 255, 255)
         self._black = (0, 0, 0)
         self._green = (0, 200, 0)
@@ -75,11 +75,16 @@ class GUIView(TypeRaceView):
         """
 
         # Draw text
+        letter_surface = self._font.render('a', True, (255, 255, 255))
+        width = letter_surface.get_width()
+        height = letter_surface.get_height()
         self._screen.fill(self._black)  # Fill background with black
         text = self._font.render(
             random_paragraph(), False, self._white
         )
-        self._screen.blit(text, (400, 300))
-
+        print(height)
+        move = len(self._player.typed_text) * width
+        self._screen.blit(text, (400 - move, 300))
+  
 
         pygame.display.flip()
