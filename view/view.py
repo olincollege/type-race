@@ -7,7 +7,7 @@ the graphical display for the game using Pygame.
 
 import pygame
 from abc import ABC, abstractmethod
-
+from model.text_gen import random_paragraph
 
 class TypeRaceView(ABC):
     """
@@ -60,6 +60,10 @@ class GUIView(TypeRaceView):
         self._font = pygame.font.Font(None, 32)
         self._white = (255, 255, 255)
         self._black = (0, 0, 0)
+        self._green = (0, 200, 0)
+        self._red = (200, 0, 0)
+        self._grey = (200, 200, 200)
+
 
     def draw(self):
         """
@@ -73,10 +77,9 @@ class GUIView(TypeRaceView):
         # Draw text
         self._screen.fill(self._black)  # Fill background with black
         text = self._font.render(
-            self._player.typed_text, True, self._white, self._black
+            random_paragraph(), False, self._white
         )
-        text_rect = text.get_rect()
-        text_rect.center = (400, 300)
-        self._screen.blit(text, text_rect)
+        self._screen.blit(text, (400, 300))
+
 
         pygame.display.flip()

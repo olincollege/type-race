@@ -2,8 +2,7 @@
 
 
 def random_paragraph():
-    return """
-            Cloud amber window stream fabric circle wander jungle paper breeze 
+    return """Cloud amber window stream fabric circle wander jungle paper breeze
             silver giant button cradle violet candle motion flame garden bridge 
             silent lunar glow travel sunset whisper canvas shadow moment ocean 
             crystal whistle marble castle dream echo ribbon forest hidden puzzle
@@ -22,4 +21,4 @@ def random_paragraph():
             trail log pebble smoke chime veil marsh mist root fern shade brook 
             bark bramble wisp bloom flick lumen gust zephyr glade briar ridge 
             flint mire reed
-        """
+         """
