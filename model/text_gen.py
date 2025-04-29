@@ -1,7 +1,28 @@
-"""Generate a random paragraph of text for all players to type."""
+"""Generate a paragraph of text for all players to type."""
+
+import random
+from model.word_list import words
 
 
 def random_paragraph():
+    """
+    Generate a random paragraph of 200 words from the word list in word_list.py.
+
+    Returns a string representing all the words in the paragraph.
+    """
+    # Create a list of 200 randomly chosen words from the word list
+    random_words = random.choices(words, k=200)
+    # Join all words in the list and separate with spaces.
+    return " ".join(random_words)
+
+
+def sample_paragraph():
+    """
+    Pre-set paragraph of 200 words without punctuation.
+
+    Returns a string representing all the words in the paragraph.
+    """
+
     return """cloud amber window stream fabric circle wander jungle paper breeze
 silver giant button cradle violet candle motion flame garden bridge 
 silent lunar glow travel sunset whisper canvas shadow moment ocean 
