@@ -1,12 +1,13 @@
 """
 Class definitions for the controller component of a typing game.
 
-Defines abstract and concrete controller classes for managing player input 
+Defines abstract and concrete controller classes for managing player input
 and updating the game state based on keyboard interactions.
 """
 
 import pygame
 from abc import ABC, abstractmethod
+
 
 class TypeRaceController(ABC):
     """
@@ -19,13 +20,14 @@ class TypeRaceController(ABC):
 
     def __init__(self, player):
         """
-        Initialize the TypeRaceController with a reference to the player or game logic.
+        Initialize the TypeRaceController with a reference to the player or
+        game logic.
 
         Args:
             player: An object representing the player or game state manager.
         """
         self._player = player
-        self.active_string = ''
+        self.active_string = ""
 
     @property
     def player(self):
@@ -40,11 +42,12 @@ class TypeRaceController(ABC):
     @abstractmethod
     def typechecker(self):
         """
-        Abstract method for handling typing input.
+        Abstract method for handling user input.
 
-        Subclasses must implement this method to define how typing input
+        Subclasses must implement this method to define how user input
         is processed and how the game state should be updated accordingly.
         """
+
 
 class TextController(TypeRaceController):
     """
@@ -64,23 +67,48 @@ class TextController(TypeRaceController):
         - Adds a space character when the spacebar is pressed.
 
         After processing input, updates the player's displayed text.
-
-        Returns:
-            True if input handling should continue; False if the game window is closed.
         """
         player = self._player
-        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-                   'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        letters = [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+        ]
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                player.game_over = True
             if event.type == pygame.KEYDOWN:
                 if event.unicode.lower() in letters:
                     self.active_string += event.unicode
-                if event.key == pygame.K_BACKSPACE and len(self.active_string) > 0:
+                if (
+                    event.key == pygame.K_BACKSPACE
+                    and len(self.active_string) > 0
+                ):
                     self.active_string = self.active_string[:-1]
                 if event.key == pygame.K_SPACE:
-                    self.active_string += ' '
+                    self.active_string += " "
         player.update_text(self.active_string)
-        return True
