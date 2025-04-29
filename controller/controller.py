@@ -8,35 +8,6 @@ and updating the game state based on keyboard interactions.
 from abc import ABC, abstractmethod
 import pygame
 
-letters = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-]
-
 
 class TypeRaceController(ABC):
     """
@@ -45,6 +16,10 @@ class TypeRaceController(ABC):
     This class provides an interface for handling player input
     and updating the game state. Subclasses must implement
     the `typechecker` method to define specific input handling behavior.
+
+    Attributes:
+        _player: Instance of TypeRacePlayer associated with the controller
+        _active_string: string representing all text typed by the user
     """
 
     def __init__(self, player):
@@ -56,7 +31,7 @@ class TypeRaceController(ABC):
             player: An object representing the player or game state manager.
         """
         self._player = player
-        self.active_string = ""
+        self._active_string = ""
 
     @property
     def player(self):
@@ -97,19 +72,29 @@ class TextController(TypeRaceController):
 
         After processing input, updates the player's displayed text.
         """
-        player = self._player
 
+        # Iterate through each 'event' recorded by pygame
         for event in pygame.event.get():
+            # If the user closed the game window, set the game_over flag to True
             if event.type == pygame.QUIT:
-                player.game_over = True
+                self._player.game_over = True
+
+            # If the user pressed a key on the keyboard
             if event.type == pygame.KEYDOWN:
-                if event.unicode.lower() in letters:
-                    self.active_string += event.unicode
+                # If the key pressed was a letter, add to active string
+                if event.unicode.lower().isalpha():
+                    self._active_string += event.unicode
+
+                # If backspace was pressed and the user has previously typed
+                # input, remove the last typed input from the active string
                 if (
                     event.key == pygame.K_BACKSPACE
-                    and len(self.active_string) > 0
+                    and len(self._active_string) > 0
                 ):
-                    self.active_string = self.active_string[:-1]
+                    self._active_string = self._active_string[:-1]
+
+                # If the spacebar was pressed, add a space to the active string
                 if event.key == pygame.K_SPACE:
-                    self.active_string += " "
-        player.update_text(self.active_string)
+                    self._active_string += " "
+        # Update the player with the new active string
+        self._player.update_text(self._active_string)
