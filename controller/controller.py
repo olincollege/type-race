@@ -5,8 +5,37 @@ Defines abstract and concrete controller classes for managing player input
 and updating the game state based on keyboard interactions.
 """
 
-import pygame
 from abc import ABC, abstractmethod
+import pygame
+
+letters = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+]
 
 
 class TypeRaceController(ABC):
@@ -69,34 +98,6 @@ class TextController(TypeRaceController):
         After processing input, updates the player's displayed text.
         """
         player = self._player
-        letters = [
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j",
-            "k",
-            "l",
-            "m",
-            "n",
-            "o",
-            "p",
-            "q",
-            "r",
-            "s",
-            "t",
-            "u",
-            "v",
-            "w",
-            "x",
-            "y",
-            "z",
-        ]
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
