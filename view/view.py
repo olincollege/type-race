@@ -5,9 +5,10 @@ Defines an abstract TextView class that sets up and manages
 the graphical display for the game using Pygame.
 """
 
-import pygame
 from abc import ABC, abstractmethod
-from model.text_gen import random_paragraph
+import pygame
+from view.gui import style_settings
+
 
 class TypeRaceView(ABC):
     """
@@ -15,6 +16,10 @@ class TypeRaceView(ABC):
 
     Provides a framework for creating and managing the game's display window.
     Subclasses must implement additional drawing functionality as needed.
+
+    Attributes:
+        _player: TypeRacePlayer object representing the player linked to this
+            view
     """
 
     def __init__(self, player):
@@ -25,16 +30,6 @@ class TypeRaceView(ABC):
             player: An object representing the player or the game state manager.
         """
         self._player = player
-
-    @property
-    def player(self):
-        """
-        Return the player or game logic object associated with this view.
-
-        Returns:
-            The player or game state object.
-        """
-        return self._player
 
     @abstractmethod
     def draw(self):
@@ -47,23 +42,36 @@ class GUIView(TypeRaceView):
     """
     Subclass of TypeRaceView that implements the view for by creating a
     graphical user interface.
+
+    Attributes:
+        _style: dict containing style settings for GUI view
+        _screen: pygame display object representing the GUI's window
+        _font: pygame font object representing the chosen font
+        _letter_width: int representing the length of each character of the
+            font in pixels
     """
 
     def __init__(self, player):
+        # Get the player object from the abstract base class
         super().__init__(player)
+        # Start pygame
         pygame.init()
-        screen_width = 800
-        screen_height = 600
-        self._screen = pygame.display.set_mode((screen_width, screen_height))
-        pygame.display.set_caption("My Game View")
+        # Get the style settings dict
+        self._style = style_settings
 
-        self._font = pygame.font.SysFont('dejavusansmono', 32)
-        self._white = (255, 255, 255)
-        self._black = (0, 0, 0)
-        self._green = (0, 200, 0)
-        self._red = (200, 0, 0)
-        self._grey = (200, 200, 200)
+        # Set up pygame window according to settings
+        self._screen = pygame.display.set_mode(
+            (self._style["window_width"], self._style["window_height"])
+        )
+        pygame.display.set_caption(self._style["window_caption"])
 
+        # Set up font attribute
+        self._font = pygame.font.Font(
+            self._style["font_path"], self._style["font_size"]
+        )
+        # Determine width of characters
+        letter_surface = self._font.render("a", True, (255, 255, 255))
+        self._letter_width = letter_surface.get_width()
 
     def draw(self):
         """
@@ -75,16 +83,17 @@ class GUIView(TypeRaceView):
         """
 
         # Draw text
-        letter_surface = self._font.render('a', True, (255, 255, 255))
-        width = letter_surface.get_width()
-        height = letter_surface.get_height()
-        self._screen.fill(self._black)  # Fill background with black
+        self._screen.fill(self._style["background_color"])
         text = self._font.render(
-            random_paragraph(), False, self._white
+            self._player.prompt_text, False, self._style["prompt_text_color"]
         )
-        print(height)
-        move = len(self._player.typed_text) * width
-        self._screen.blit(text, (400 - move, 300))
-  
+        move = len(self._player.typed_text) * self._letter_width
+        self._screen.blit(
+            text,
+            (
+                (self._style["window_width"]) / 2 - move,
+                (self._style["window_height"]) / 2,
+            ),
+        )
 
         pygame.display.flip()
