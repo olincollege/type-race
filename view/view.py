@@ -75,8 +75,8 @@ class GUIView(TypeRaceView):
         text = self._font.render(
             self._player.typed_text, True, self._white, self._black
         )
-        textRect = text.get_rect()
-        textRect.center = (400, 300)
-        self._screen.blit(text, textRect)
+        text_rect = text.get_rect()
+        text_rect.center = (400, 300)
+        self._screen.blit(text, text_rect)
 
         pygame.display.flip()
