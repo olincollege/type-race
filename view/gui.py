@@ -18,5 +18,6 @@ style_settings = {
     "font_size": 32,
     "background_color": colors["black"],
     "prompt_text_color": colors["grey"],
-    "typed_text_color": colors["white"],
+    "typed_text_color": (255, 255, 255),
+    "red_line": (255, 0, 0)
 }

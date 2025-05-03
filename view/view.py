@@ -95,5 +95,15 @@ class GUIView(TypeRaceView):
                 (self._style["window_height"]) / 2,
             ),
         )
+        pygame.draw.rect(self._screen, (255, 255, 255),
+                 [415 - self._letter_width, 300, self._letter_width+5, 40], 1)
+
+        # Creating either red or white underline under typed letters
+        add = self._letter_width # how much the letters need to shift
+        for i in range(len(self._player.typed_text)):
+            
+            pygame.draw.rect(self._screen, (255, 0, 0),
+                [417 - self._letter_width - add, 338, self._letter_width,2], 19)
+            add += self._letter_width
 
         pygame.display.flip()

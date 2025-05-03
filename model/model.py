@@ -42,6 +42,7 @@ class TypeRacePlayer(ABC):
         self._prompt_text = self.generate_paragraph()
         self._time_remaining = time_limit
         self._wpm = 0
+        self._mistake_indexes = []
 
     def update_text(self, text):
         """
@@ -84,14 +85,15 @@ class TypeRacePlayer(ABC):
         typed_list = self._typed_text.strip().split(" ")
 
         correct_words = 0
-        mistake_indexes = []
 
         # Iterate through the number of words that have been typed
         for i, typed_word in enumerate(typed_list):
             if typed_word == prompt_list[i]:  # If the typed word was correct
                 correct_words += 1
             else:  # If the typed word was incorrect
-                mistake_indexes.append(i)
+                self._mistake_indexes.append(i)
+
+        
 
         # Calculate the new wpm
         elapsed_minutes = (self._time_limit - self._time_remaining) / 60
@@ -114,6 +116,11 @@ class TypeRacePlayer(ABC):
     def wpm(self):
         """Get wpm"""
         return self._wpm
+
+    @property
+    def mistake_indexes(self):
+        """Get error array"""
+        return self._mistake_indexes
 
     @abstractmethod
     def generate_paragraph(self):
