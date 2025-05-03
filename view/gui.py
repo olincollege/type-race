@@ -11,13 +11,19 @@ colors = {
 }
 
 style_settings = {
+    # Window settings
     "window_width": 800,
     "window_height": 600,
     "window_caption": "Type Racer",
+    # Font
     "font_path": "view/fonts/Hack-Regular.ttf",  # Must be monospaced
     "font_size": 32,
+    # Background
     "background_color": colors["black"],
+    # Text
     "prompt_text_color": colors["grey"],
-    "typed_text_color": (255, 255, 255),
-    "red_line": (255, 0, 0)
+    "typed_text_color": colors["white"],
+    # Underlines
+    "mistake_underline": colors["red"],
+    "correct_underline": colors["white"],
 }

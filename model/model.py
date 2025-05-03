@@ -42,7 +42,7 @@ class TypeRacePlayer(ABC):
         self._prompt_text = self.generate_paragraph()
         self._time_remaining = time_limit
         self._wpm = 0
-        self._mistake_indexes = []
+        self._mistake_indexes = [0] * len(self._prompt_text)
 
     def update_text(self, text):
         """
@@ -74,26 +74,12 @@ class TypeRacePlayer(ABC):
 
     def update_wpm(self):
         """
-        Calculate the user's current wpm by comparing the prompt text to the
-        typed text of the user.
+        Calculate the user's current wpm by determining how many correct words
+        have been typed within the time elapsed.
 
-        Update the wpm property with the new wpm. Store all mistakes in a list containing the index corresponding to the word where the user made a mistake.
+        Update the wpm property with the new wpm.
         """
-        # Split the prompt and typed text into a list of words, removing blank
-        # spaces and new lines
-        prompt_list = self._prompt_text.replace("\n", "").split(" ")
-        typed_list = self._typed_text.strip().split(" ")
-
-        correct_words = 0
-
-        # Iterate through the number of words that have been typed
-        for i, typed_word in enumerate(typed_list):
-            if typed_word == prompt_list[i]:  # If the typed word was correct
-                correct_words += 1
-            else:  # If the typed word was incorrect
-                self._mistake_indexes.append(i)
-
-        
+        correct_words = self.check_accuracy()
 
         # Calculate the new wpm
         elapsed_minutes = (self._time_limit - self._time_remaining) / 60
@@ -101,6 +87,36 @@ class TypeRacePlayer(ABC):
         # zero)
         if elapsed_minutes > 0:
             self._wpm = correct_words // elapsed_minutes
+
+    def check_accuracy(self):
+        """
+        Compare the typed text with the prompt text to determine what mistakes
+        the user has made and how many correct words have been typed. Update
+        the mistake index to indicate which characters are incorrect.
+
+        Return an int representing the number of correct words.
+        """
+        correct_words = 0
+        incorrect_word = False  # Tracks if the current word is incorrect
+
+        for i, typed_char in enumerate(self._typed_text):
+            prompt_char = self._prompt_text[i]
+
+            if typed_char == prompt_char:
+                self._mistake_indexes[i] = 0
+            else:
+                incorrect_word = True
+                self._mistake_indexes[i] = 1
+
+            if prompt_char == " ":  # End of the word has been reached
+                if not incorrect_word:
+                    correct_words += 1
+                # Reset the incorrect word flag only if the user matched the
+                # space, otherwise keep the incorrect word flag set to true for
+                # the next word
+                if typed_char == " ":
+                    incorrect_word = False  # Reset the incorrect word flag
+        return correct_words
 
     @property
     def time_remaining(self):
