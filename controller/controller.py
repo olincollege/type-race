@@ -57,8 +57,8 @@ class TextController(TypeRaceController):
     """
     Concrete controller class for handling keyboard input in a typing game.
 
-    Captures letter keystrokes, spaces, and backspaces,
-    builds the current input string, and updates the game state based on the typed text.
+    Captures letter keystrokes, spaces, and backspaces, builds the current
+    input string, and updates the game state based on the typed text.
     """
 
     def typechecker(self):
