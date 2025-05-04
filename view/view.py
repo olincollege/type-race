@@ -104,9 +104,10 @@ class GUIView(TypeRaceView):
 
         # Creating either red or white underline under typed letters
         add = self._letter_width  # how much the letters need to shift
+        mistakes = self._player.mistake_indexes[:len(self._player.typed_text)][::-1]
         for i in range(len(self._player.typed_text)):
             color = self._style["correct_underline"]
-            if self._player.mistake_indexes[i]:
+            if mistakes[i]:
                 color = self._style["mistake_underline"]
             pygame.draw.rect(
                 self._screen,
