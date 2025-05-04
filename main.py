@@ -57,4 +57,11 @@ while True:
     # Refresh the display
     view.draw()
 
-# Print winner/wpm ??
+# Print game results
+if player.wpm > player.opponent_wpm:
+    print("\nCongratulations! You won!")
+elif player.wpm == player.opponent_wpm:
+    print("\nYou... tied??? Good thing our code checks for that!")
+else:
+    print("\nWomp womp! You lost!")
+print(f"My wpm: {player.wpm}, Opponent wpm: {player.opponent_wpm}\n")
