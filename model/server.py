@@ -85,7 +85,7 @@ class Host(Network):
         """
         try:
             s.bind((self._host_ip, PORT))
-        except OSError as e:
+        except socket.error as e:
             print("SERVER: Failed to bind server", e)
 
         client_conn = self.find_client()
@@ -130,8 +130,8 @@ class Client(Network):
         """
         try:
             s.connect((self._host_ip, PORT))
-        except TimeoutError as e:
-            print("SERVER: Connection Timeout", e)
+        except socket.error as e:
+            print("SERVER: Connection Failed", e)
 
         thread = threading.Thread(target=self.transmit_receive_wpm, args=(s,))
         thread.start()
