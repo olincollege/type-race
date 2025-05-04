@@ -187,11 +187,12 @@ class HostPlayer(TypeRacePlayer):
         Print the host's IPv4 address to the terminal so that the client can
         connect.
         """
-        print("\nThe host's IPv4 address is:", self._host.get_host_ip())
+        print("\nThe host's IPv4 address is:", self._host.get_host_ip(), "\n")
 
     def start_server(self):
         """
-        Instruct Host to start the server and start the thread that will continuously exchange words per minute with the client.
+        Instruct Host to start the server and start the thread that will
+        continuously exchange words per minute with the client.
         """
         self._host.start_server()
 

@@ -23,30 +23,30 @@ class Network(ABC):
 
     def __init__(self, player):
         self._player = player
-        self._host_ip = "127.0.0.1"  # self.get_host_ip()
+        self._host_ip = self.get_host_ip()
 
     def transmit_receive_wpm(self, conn):
         """
-        Threaded function that connects the host to the client. Continuously
-        transmit the host's wpm and receive the client's wpm.
+        Threaded function that exchanges wpm with the other player. Continuously
+        transmit this player's wpm and receive the opponent's wpm.
 
         Args:
-            conn: socket object representing the connection to the client
+            conn: socket object representing the connection to the other player
         """
         while True:
-            host_wpm = self._player.wpm
-            conn.send(str(host_wpm).encode())
+            my_wpm = self._player.wpm
+            conn.send(str(my_wpm).encode())
 
-            client_wpm = conn.recv(1024).decode()
-            if client_wpm:
-                self._player.opponent_wpm = int(client_wpm)
+            opponent_wpm = conn.recv(1024).decode()
+            if opponent_wpm:
+                self._player.opponent_wpm = int(opponent_wpm)
             else:
                 print("SERVER: No data received, close connection")
                 break
 
-            print(f"Host {host_wpm} Client {client_wpm}")
+            print(f"My {my_wpm} Opponent {opponent_wpm}")
             if self._player.game_over:
-                print("SERVER: Game ended, close connection")
+                print("SERVER: Game ended, close connection (player.game_over)")
                 break
             time.sleep(0.5)
 
@@ -85,7 +85,7 @@ class Host(Network):
         """
         try:
             s.bind((self._host_ip, PORT))
-        except Exception as e:
+        except OSError as e:
             print("SERVER: Failed to bind server", e)
 
         client_conn = self.find_client()
@@ -120,7 +120,7 @@ class Client(Network):
         Returns a string with the user's input.
         """
         return input(
-            "Please enter the hosts' IP address (displayed on their screen)"
+            "\nPlease enter the hosts' IP address (displayed on their screen): "
         )
 
     def connect_server(self):
@@ -130,8 +130,8 @@ class Client(Network):
         """
         try:
             s.connect((self._host_ip, PORT))
-        except Exception as e:
-            print("SERVER: Connection Failed", e)
+        except TimeoutError as e:
+            print("SERVER: Connection Timeout", e)
 
         thread = threading.Thread(target=self.transmit_receive_wpm, args=(s,))
         thread.start()
