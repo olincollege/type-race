@@ -52,6 +52,16 @@ class GUIView(TypeRaceView):
     """
 
     def __init__(self, player):
+        """
+        Initialize the game view with player data and style settings.
+
+        Sets up the Pygame environment, loads style configuration,
+        creates the game window, initializes the font, and calculates
+        character width for alignment purposes.
+
+        Args:
+            player: The player object containing game state information.
+        """
         # Get the player object from the abstract base class
         super().__init__(player)
         # Start pygame
@@ -73,21 +83,22 @@ class GUIView(TypeRaceView):
         letter_surface = self._font.render("a", True, (255, 255, 255))
         self._letter_width = letter_surface.get_width()
 
-    def draw(self):
+    def text(self):
         """
-        Initialize the Pygame window and display a basic start screen.
+        Render the main prompt text centered on the screen.
 
-        Sets up the screen size, background color, and draws initial elements
-        (e.g., a colored rectangle). This method prepares the visual environment
-        where the rest of the game will be displayed.
+        Fills the background with the specified color, renders the full prompt text,
+        and shifts it horizontally based on the number of typed characters.
+        Draws a white rectangle to represent the current typing position (caret).
         """
-
         # Draw text
         self._screen.fill(self._style["background_color"])
         text = self._font.render(
             self._player.prompt_text, False, self._style["prompt_text_color"]
         )
-        move = len(self._player.typed_text) * self._letter_width
+        move = (
+            len(self._player.typed_text) * self._letter_width
+        )  # how much letters shift
         self._screen.blit(
             text,
             (
@@ -102,9 +113,19 @@ class GUIView(TypeRaceView):
             1,
         )
 
+    def underlines(self):
+        """
+        Draw underlines beneath typed characters to indicate correctness.
+
+        Renders red underlines for mistakes and white underlines for correct letters,
+        based on the player's mistake index list. Each underline is positioned relative
+        to the typed text and adjusted as more letters are typed.
+        """
         # Creating either red or white underline under typed letters
         add = self._letter_width  # how much the letters need to shift
-        mistakes = self._player.mistake_indexes[:len(self._player.typed_text)][::-1]
+        mistakes = self._player.mistake_indexes[: len(self._player.typed_text)][
+            ::-1
+        ]  # formatting mistakes array
         for i in range(len(self._player.typed_text)):
             color = self._style["correct_underline"]
             if mistakes[i]:
@@ -116,5 +137,47 @@ class GUIView(TypeRaceView):
                 19,
             )
             add += self._letter_width
+
+    def info(self):
+        """
+        Display player stats such as words per minute (WPM) and remaining time.
+
+        Renders and places the WPM and countdown timer text in the top-left corner
+        of the screen using the game's font and color settings.
+        """
+        # For wpm
+        wpm_text = f"{self._player.wpm} WPM"
+        wpm = self._font.render(
+            wpm_text, False, self._style["prompt_text_color"]
+        )
+        self._screen.blit(
+            wpm,
+            (
+                20,
+                60,
+            ),
+        )
+        # The following is for the timer
+        time = f"{self._player.time_remaining} TIMER"
+        timer = self._font.render(time, False, self._style["prompt_text_color"])
+        self._screen.blit(
+            timer,
+            (
+                20,
+                20,
+            ),
+        )
+
+    def draw(self):
+        """
+        Draw all visual elements of the game screen.
+
+        Clears the screen and renders the prompt text, correctness underlines,
+        and player information (WPM and timer). Updates the display to show the changes.
+        """
+
+        self.text()  # text and square around character
+        self.underlines()  # Makes underlines
+        self.info()  # Makes timer and wpm
 
         pygame.display.flip()
