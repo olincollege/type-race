@@ -87,9 +87,10 @@ class GUIView(TypeRaceView):
         """
         Render the main prompt text centered on the screen.
 
-        Fills the background with the specified color, renders the full prompt text,
-        and shifts it horizontally based on the number of typed characters.
-        Draws a white rectangle to represent the current typing position (caret).
+        Fills the background with the specified color, renders the full 
+        prompt text, and shifts it horizontally based on the number of 
+        typed characters. Draws a white rectangle to represent the current 
+        typing position (caret).
         """
         # Draw text
         self._screen.fill(self._style["background_color"])
@@ -117,16 +118,17 @@ class GUIView(TypeRaceView):
         """
         Draw underlines beneath typed characters to indicate correctness.
 
-        Renders red underlines for mistakes and white underlines for correct letters,
-        based on the player's mistake index list. Each underline is positioned relative
-        to the typed text and adjusted as more letters are typed.
+        Renders red underlines for mistakes and white underlines for correct 
+        letters,based on the player's mistake index list. Each underline is 
+        positioned relative to the typed text and adjusted as more letters 
+        are typed.
         """
         # Creating either red or white underline under typed letters
         add = self._letter_width  # how much the letters need to shift
         mistakes = self._player.mistake_indexes[: len(self._player.typed_text)][
             ::-1
         ]  # formatting mistakes array
-        for i in range(len(self._player.typed_text)):
+        for i in range(len(self._player.typed_text)): # prints all lines
             color = self._style["correct_underline"]
             if mistakes[i]:
                 color = self._style["mistake_underline"]
@@ -142,8 +144,8 @@ class GUIView(TypeRaceView):
         """
         Display player stats such as words per minute (WPM) and remaining time.
 
-        Renders and places the WPM and countdown timer text in the top-left corner
-        of the screen using the game's font and color settings.
+        Renders and places the WPM and countdown timer text in the top-left 
+        corner of the screen using the game's font and color settings.
         """
         # For wpm
         wpm_text = f"{self._player.wpm} WPM"
@@ -173,7 +175,8 @@ class GUIView(TypeRaceView):
         Draw all visual elements of the game screen.
 
         Clears the screen and renders the prompt text, correctness underlines,
-        and player information (WPM and timer). Updates the display to show the changes.
+        and player information (WPM and timer). Updates the display to show the 
+        changes.
         """
 
         self.text()  # text and square around character
