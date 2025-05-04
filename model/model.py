@@ -1,11 +1,11 @@
 """Class definitions for model"""
 
-from abc import ABC, abstractmethod
 from datetime import datetime
 from model.text_gen import random_paragraph
+from model.server import Host, Client
 
 
-class TypeRacePlayer(ABC):
+class TypeRacePlayer:
     """
     Create an abstract base class representing the state of Type Race player.
 
@@ -23,6 +23,8 @@ class TypeRacePlayer(ABC):
         _time_remaining: int representing the number of seconds left before time
             is up
         _wpm: integer representing the user's current wpm adjusted for errors
+        _prompt_text: string representing the paragraph for the user to type
+
     """
 
     def __init__(self, time_limit=60):
@@ -35,7 +37,7 @@ class TypeRacePlayer(ABC):
             time_limit: int representing the number of seconds to start the game
                 with. If not provided, default to 60 seconds.
         """
-        self._start_time = datetime.now()
+        self._start_time = datetime.now()  # Will be overwritten on game start
         self._time_limit = time_limit
         self.game_over = False
         self._typed_text = ""
@@ -43,6 +45,12 @@ class TypeRacePlayer(ABC):
         self._time_remaining = time_limit
         self._wpm = 0
         self._mistake_indexes = [0] * len(self._prompt_text)
+
+    def set_start_time(self):
+        """
+        Set the start time of the game to the current time.
+        """
+        self._start_time = datetime.now()
 
     def update_text(self, text):
         """
@@ -86,7 +94,7 @@ class TypeRacePlayer(ABC):
         # Avoid zero division on start up (when the elapsed minutes would be
         # zero)
         if elapsed_minutes > 0:
-            self._wpm = correct_words // elapsed_minutes
+            self._wpm = int(correct_words // elapsed_minutes)
 
     def check_accuracy(self):
         """
@@ -118,6 +126,16 @@ class TypeRacePlayer(ABC):
                     incorrect_word = False  # Reset the incorrect word flag
         return correct_words
 
+    def generate_paragraph(self):
+        """
+        Generate a random paragraph to use as the the prompt for the typing
+        race.
+
+        Returns a string representing the entire prompt paragraph for the user
+        to type.
+        """
+        return random_paragraph()
+
     @property
     def time_remaining(self):
         """Get time_remaining"""
@@ -138,36 +156,68 @@ class TypeRacePlayer(ABC):
         """Get error array"""
         return self._mistake_indexes
 
-    @abstractmethod
-    def generate_paragraph(self):
-        """
-        Generic method to generate the prompt text paragraph. Must be
-        implemented in a subclass.
-
-        Returns a string representing the entire prompt paragraph for the user
-        to type.
-        """
-
-
-class SinglePlayer(TypeRacePlayer):
-    """
-    Subclass of TypeRacePlayer to play a single player game of Type Player.
-
-    Properties:
-        _prompt_text: string representing the paragraph for the user to type
-    """
-
-    def generate_paragraph(self):
-        """
-        Generate a random paragraph to use as the the prompt for the typing
-        race.
-
-        Returns a string representing the entire prompt paragraph for the user
-        to type.
-        """
-        return random_paragraph()
-
     @property
     def prompt_text(self):
         """Get prompt_text"""
         return self._prompt_text
+
+
+class HostPlayer(TypeRacePlayer):
+    """
+    Subclass of TypeRacePlayer to represent the host player. Extends the base
+    class by printing the local IP address and starting the server.
+
+    Attributes:
+        opponent_wpm: int represent the words per minute of the opposing player
+        _host: Host object containing the connection to the client
+    """
+
+    def __init__(self, time_limit=60):
+        """
+        Initialize a new host player.
+        """
+        super().__init__(time_limit)
+        self.opponent_wpm = 0
+        self._host = Host(self)
+        self.display_local_ip()
+        self.start_server()
+
+    def display_local_ip(self):
+        """
+        Print the host's IPv4 address to the terminal so that the client can
+        connect.
+        """
+        print("\nThe host's IPv4 address is:", self._host.get_host_ip())
+
+    def start_server(self):
+        """
+        Instruct Host to start the server and start the thread that will continuously exchange words per minute with the client.
+        """
+        self._host.start_server()
+
+
+class ClientPlayer(TypeRacePlayer):
+    """
+    Subclass of TypeRacePlayer to represent the client player. Extends the base
+    class by connecting to the server.
+
+    Attributes:
+        opponent_wpm: int represent the words per minute of the opposing player
+        _client: Client object containing the connection to the host
+    """
+
+    def __init__(self, time_limit=60):
+        """
+        Initialize a new client player.
+        """
+        super().__init__(time_limit)
+        self.opponent_wpm = 0
+        self._client = Client(self)
+        self.connect_server()
+
+    def connect_server(self):
+        """
+        Instruct Client to connect to the server and start the thread that will
+        continuously exchange words per minute with the host.
+        """
+        self._client.connect_server()
