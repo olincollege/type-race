@@ -6,8 +6,10 @@ import socket
 import threading
 import time
 from abc import ABC, abstractmethod
-import netifaces
-
+import platform
+import subprocess
+import sys
+import os
 PORT = 5555
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -74,14 +76,37 @@ class Host(Network):
         Return a string containing the IPv4 address. The address consists of a
         set of 4 numbers, separated by periods.
         """
-        for iface in netifaces.interfaces():
-            addrs = netifaces.ifaddresses(iface)
-            if netifaces.AF_INET in addrs:
-                for addr in addrs[netifaces.AF_INET]:
-                    ip = addr.get('addr')
-                    if ip and not ip.startswith('127.') and not ip.startswith('172.'):
-                        return ip
-        return "127.0.0.1"  # Fallback if nothing found
+        if "microsoft" in platform.uname().release.lower() or "wsl" in platform.release().lower():
+            print("🚫 WSL detected. Host mode not supported from WSL.")
+            return "127.0.0.1"
+
+        if platform.system() == "Darwin":
+            # Try to get the IP address of en0 (Wi-Fi)
+            try:
+                result = subprocess.run(["ipconfig", "getifaddr", "en0"], capture_output=True, text=True)
+                ip = result.stdout.strip()
+                if ip:
+                    print(f"🟢 macOS detected. Wi-Fi IP (en0): {ip}")
+                    return ip
+                else:
+                    print("⚠️ Could not get IP from en0. Falling back to 127.0.0.1")
+            except Exception as e:
+                print("❌ macOS IP fetch failed:", e)
+            return "127.0.0.1"
+
+        # Native Linux
+        try:
+            result = subprocess.run(["hostname", "-I"], capture_output=True, text=True)
+            ip_list = result.stdout.strip().split()
+            for ip in ip_list:
+                if not ip.startswith("127."):
+                    print(f"🟢 Linux detected. Host IP: {ip}")
+                    return ip
+            print("⚠️ No valid LAN IP found. Using loopback.")
+        except Exception as e:
+            print("❌ Failed to get Linux IP:", e)
+
+        return "127.0.0.1"
 
     def start_server(self):
         """
