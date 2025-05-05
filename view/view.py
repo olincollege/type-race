@@ -170,18 +170,19 @@ class GUIView(TypeRaceView):
             ),
         )
         # For opponent's wpm
-        color = self._style["text_color"]
-        if self._player.opponent_wpm > self._player.wpm:
-            color = self._style["alternate_text_color"]
-        opp_wpm_text = f"{self._player.opponent_wpm} Opponent WPM"
-        opp_wpm = self._font.render(opp_wpm_text, False, color)
-        self._screen.blit(
-            opp_wpm,
-            (
-                20,
-                100,
-            ),
-        )
+        if hasattr(self._player, "opponent_wpm"):  # If multiplayer game
+            color = self._style["text_color"]
+            if self._player.opponent_wpm > self._player.wpm:
+                color = self._style["alternate_text_color"]
+            opp_wpm_text = f"{self._player.opponent_wpm} Opponent WPM"
+            opp_wpm = self._font.render(opp_wpm_text, False, color)
+            self._screen.blit(
+                opp_wpm,
+                (
+                    20,
+                    100,
+                ),
+            )
 
     def draw(self):
         """

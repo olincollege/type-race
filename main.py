@@ -58,10 +58,13 @@ while True:
     view.draw()
 
 # Print game results
-if player.wpm > player.opponent_wpm:
-    print("\nCongratulations! You won!")
-elif player.wpm == player.opponent_wpm:
-    print("\nYou... tied??? Good thing our code checks for that!")
+if hasattr(player, "opponent_wpm"):  # If multiplayer game
+    if player.wpm > player.opponent_wpm:
+        print("\nCongratulations! You won!")
+    elif player.wpm == player.opponent_wpm:
+        print("\nYou... tied??? Good thing our code checks for that!")
+    else:
+        print("\nWomp womp! You lost!")
+    print(f"My wpm: {player.wpm}, Opponent wpm: {player.opponent_wpm}\n")
 else:
-    print("\nWomp womp! You lost!")
-print(f"My wpm: {player.wpm}, Opponent wpm: {player.opponent_wpm}\n")
+    print(f"\nGame over. WPM: {player.wpm}")
