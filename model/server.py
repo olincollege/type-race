@@ -77,35 +77,46 @@ class Host(Network):
         set of 4 numbers, separated by periods.
         """
         if "microsoft" in platform.uname().release.lower() or "wsl" in platform.release().lower():
-            print("🚫 WSL detected. Host mode not supported from WSL.")
+            print("🚫 WSL detected — use host mode from macOS, Windows, or Linux instead.")
             return "127.0.0.1"
 
-        if platform.system() == "Darwin":
-            # Try to get the IP address of en0 (Wi-Fi)
+        system = platform.system()
+
+        # --- macOS ---
+        if system == "Darwin":
             try:
                 result = subprocess.run(["ipconfig", "getifaddr", "en0"], capture_output=True, text=True)
                 ip = result.stdout.strip()
                 if ip:
-                    print(f"🟢 macOS detected. Wi-Fi IP (en0): {ip}")
+                    print(f"🟢 macOS detected. Wi-Fi IP: {ip}")
                     return ip
-                else:
-                    print("⚠️ Could not get IP from en0. Falling back to 127.0.0.1")
             except Exception as e:
-                print("❌ macOS IP fetch failed:", e)
-            return "127.0.0.1"
+                print("❌ Failed to get macOS IP:", e)
 
-        # Native Linux
-        try:
-            result = subprocess.run(["hostname", "-I"], capture_output=True, text=True)
-            ip_list = result.stdout.strip().split()
-            for ip in ip_list:
-                if not ip.startswith("127."):
-                    print(f"🟢 Linux detected. Host IP: {ip}")
+        # --- Windows ---
+        elif system == "Windows":
+            try:
+                hostname = socket.gethostname()
+                ip = socket.gethostbyname(hostname)
+                if ip and not ip.startswith("127."):
+                    print(f"🟢 Windows detected. Host IP: {ip}")
                     return ip
-            print("⚠️ No valid LAN IP found. Using loopback.")
-        except Exception as e:
-            print("❌ Failed to get Linux IP:", e)
+            except Exception as e:
+                print("❌ Failed to get Windows IP:", e)
 
+        # --- Linux (non-WSL) ---
+        elif system == "Linux":
+            try:
+                result = subprocess.run(["hostname", "-I"], capture_output=True, text=True)
+                ip_list = result.stdout.strip().split()
+                for ip in ip_list:
+                    if not ip.startswith("127."):
+                        print(f"🟢 Linux detected. Host IP: {ip}")
+                        return ip
+            except Exception as e:
+                print("❌ Failed to get Linux IP:", e)
+
+        print("⚠️ Could not detect a LAN IP. Using localhost.")
         return "127.0.0.1"
 
     def start_server(self):
