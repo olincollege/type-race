@@ -6,6 +6,7 @@ import socket
 import threading
 import time
 from abc import ABC, abstractmethod
+import netifaces
 
 PORT = 5555
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -73,10 +74,14 @@ class Host(Network):
         Return a string containing the IPv4 address. The address consists of a
         set of 4 numbers, separated by periods.
         """
-        # Create a temporary socket connection
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as temp_socket:
-            temp_socket.connect(("8.8.8.8", 80))  # Connect to any address
-            return temp_socket.getsockname()[0]
+        for iface in netifaces.interfaces():
+            addrs = netifaces.ifaddresses(iface)
+            if netifaces.AF_INET in addrs:
+                for addr in addrs[netifaces.AF_INET]:
+                    ip = addr.get('addr')
+                    if ip and not ip.startswith('127.') and not ip.startswith('172.'):
+                        return ip
+        return "127.0.0.1"  # Fallback if nothing found
 
     def start_server(self):
         """
