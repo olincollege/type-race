@@ -11,7 +11,9 @@ When the game starts, you have 60 seconds to copy as much of the prompt on your 
 
 ## General Requirements
 
-The **single player** game mode can be played with or without an internet connection on any computer. To play multiplayer, an internet connection is required. Both players must be connected to the same network, and some networks with locked down settings will not allow the connection to form. **At Olin, use OLIN-DEVICES, not OLIN** In order to host a multiplayer game, the host must run the game from MacOS, Windows, and most Linux systems. 
+The **single player** game mode can be played with or without an internet connection on any computer. **Git** and **pip** are pre-requisites to use.
+
+To play multiplayer, an internet connection is required. Both players must be connected to the same network, and some networks with locked down settings will not allow the connection to form. **At Olin, use OLIN-DEVICES, not OLIN** In order to host a multiplayer game, the host must run the game from MacOS, Windows, and most Linux systems. 
 
 > [!NOTE]  
 > The host can **not** run the game from WSL. Network ports in WSL are not accessible to outside devices.
@@ -38,9 +40,10 @@ pip install pytest
 
 To play single player:
 
-1. Navigate to the *type-race* directory (`cd type-racer`)
-2. In the terminal, run `python main.py` to launch the game
-3. When prompted on-screen type 's' to play single player
+1. Clone the online repository onto your local computer with `git clone PASTE_HTTPS_KEY_HERE`
+2. Navigate to the *type-race* directory (`cd type-racer`)
+3. In the terminal, run `python main.py` to launch the game
+4. When prompted on-screen type 's' to play single player
 
 ## Multiplayer
 
@@ -48,9 +51,10 @@ Two laptops are required to play type-race multiplayer. One player will serve as
 
 ### Host Instructions
 
-1. Navigate to the *type-race* directory (`cd type-racer`)
-2. In the terminal, run `python main.py` to launch the game
-3. When prompted on-screen type 'h' to play as the host
+1. Clone the online repository onto your local computer with `git clone PASTE_HTTPS_KEY_HERE`
+2. Navigate to the *type-race* directory (`cd type-racer`)
+3. In the terminal, run `python main.py` to launch the game
+4. When prompted on-screen type 'h' to play as the host
 
 **If hosting on Windows**, there a couple of things to keep in mind:
 - The first time you play as host, you will get a popup asking if you want the program to communicate over public and private networks. **Click Allow**. If you fail to do this, you will have to manually add a Windows Defender firewall inbound rule to allow TCP on port 5555.
