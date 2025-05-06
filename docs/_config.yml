@@ -1,4 +1,25 @@
+title: type-race
+description: Project page for type-race game
+author: "Jacob Likins and Jacob Keller"
+
+theme: minima
+
+minima:
+  date_format: "%Y-%m-%d"
+
+# Minima: custom header links
 header_pages:
-- about.md
-- resources.md
-- setup.md
+  - _pages/setup.md
+  - _pages/about.md
+  - _pages/resources.md
+
+include:
+    - _pages
+
+exclude: 
+    - .gitignore
+    - docker-compose.yml
+    - Gemfile
+    - Gemfile.lock
+    - LICENSE
+    - README.md

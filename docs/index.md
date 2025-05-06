@@ -10,6 +10,12 @@ When the game starts, you have 60 seconds to copy as much of the prompt on your 
 
 Our primary goal with this project was to effectively implement the Model View Controller framework in a large scale project. We sought to use best practices to make our code readable, modular, and expandable in the future.
 
+To push ourselves, we also wanted to make our project feature a multiplayer game mode. We wanted to increase our skills with networking and socket programming in Python.
+
 # Unique Features
+
+- Single player and multiplayer game modes
+- Multithreaded networking for efficiency
+- Customizable GUI through editing `model/gui.py`
 
 # Video
