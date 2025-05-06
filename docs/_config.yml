@@ -4,22 +4,10 @@ author: "Jacob Likins and Jacob Keller"
 
 theme: minima
 
-minima:
-  date_format: "%Y-%m-%d"
+base_url: /home
 
 # Minima: custom header links
 header_pages:
-  - _pages/setup.md
-  - _pages/about.md
-  - _pages/resources.md
-
-include:
-    - _pages
-
-exclude: 
-    - .gitignore
-    - docker-compose.yml
-    - Gemfile
-    - Gemfile.lock
-    - LICENSE
-    - README.md
+  - setup.md
+  - about.md
+  - resources.md
