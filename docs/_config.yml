@@ -4,8 +4,6 @@ author: "Jacob Likins and Jacob Keller"
 
 theme: minima
 
-base_url: /home
-
 # Minima: custom header links
 header_pages:
   - setup.md
