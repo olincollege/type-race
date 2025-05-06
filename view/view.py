@@ -112,7 +112,7 @@ class GUIView(TypeRaceView):
         pygame.draw.rect(
             self._screen,
             self._style["cursor_color"],
-            [415 - self._letter_width, 300, self._letter_width + 5, 40],
+            [415 - self._letter_width, 300, 2, 40],
             1,
         )
 
@@ -130,7 +130,7 @@ class GUIView(TypeRaceView):
         mistakes = self._player.mistake_indexes[: len(self._player.typed_text)][
             ::-1
         ]  # formatting mistakes array
-        for i in range(len(self._player.typed_text)): # prints all lines
+        for i in range(len(self._player.typed_text)):  # prints all lines
             color = self._style["correct_underline"]
             if mistakes[i]:
                 color = self._style["mistake_underline"]
