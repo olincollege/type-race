@@ -179,15 +179,7 @@ class HostPlayer(TypeRacePlayer):
         super().__init__(time_limit)
         self.opponent_wpm = 0
         self._host = Host(self)
-        self.display_local_ip()
         self.start_server()
-
-    def display_local_ip(self):
-        """
-        Print the host's IPv4 address to the terminal so that the client can
-        connect.
-        """
-        print("\nThe host's IPv4 address is:", self._host.get_host_ip(), "\n")
 
     def start_server(self):
         """
