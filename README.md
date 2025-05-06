@@ -11,7 +11,7 @@ When the game starts, you have 60 seconds to copy as much of the prompt on your 
 
 ## General Requirements
 
-The **single player** game mode can be played with or without an internet connection on any computer. To play multiplayer, an internet connection is required. In order to host a multiplayer game, the host must run the game from MacOS, Windows, and most Linux systems. 
+The **single player** game mode can be played with or without an internet connection on any computer. To play multiplayer, an internet connection is required. Both players must be connected to the same network, and some networks with locked down settings will not allow the connection to form. **At Olin, use OLIN-DEVICES, not OLIN** In order to host a multiplayer game, the host must run the game from MacOS, Windows, and most Linux systems. 
 
 > [!NOTE]  
 > The host can **not** run the game from WSL. Network ports in WSL are not accessible to outside devices.
