@@ -9,4 +9,5 @@ Jacob Likins and Jacob Keller developed **type-race** in May of 2025 as the fina
 ## Github Profiles
 
 [Jacob Likins](https://github.com/jalikins)
+
 [Jacob Keller](https://github.com/KiwiAviation)

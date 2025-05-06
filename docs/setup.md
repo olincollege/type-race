@@ -25,8 +25,6 @@ pip install pygame
 pip install pytest
 ```
 
-# Playing type-race
-
 ## Single player
 
 To play single player:
