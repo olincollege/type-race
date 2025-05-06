@@ -7,7 +7,6 @@ title: Setup
 
 The **single player** game mode can be played with or without an internet connection on any computer. To play multiplayer, an internet connection is required. Both players must be connected to the same network, and some networks with locked down settings will not allow the connection to form. **At Olin, use OLIN-DEVICES, not OLIN** In order to host a multiplayer game, the host must run the game from MacOS, Windows, and most Linux systems. 
 
-> [!NOTE]  
 > The host can **not** run the game from WSL. Network ports in WSL are not accessible to outside devices.
 
 ## Python Dependencies
@@ -25,3 +24,36 @@ pip install pygame
 ```bash
 pip install pytest
 ```
+
+# Playing type-race
+
+## Single player
+
+To play single player:
+
+1. Navigate to the *type-race* directory (`cd type-racer`)
+2. In the terminal, run `python main.py` to launch the game
+3. When prompted on-screen type 's' to play single player
+
+## Multiplayer
+
+Two laptops are required to play type-race multiplayer. One player will serve as the host and the other player will serve as the client.
+
+### Host Instructions
+
+1. Navigate to the *type-race* directory (`cd type-racer`)
+2. In the terminal, run `python main.py` to launch the game
+3. When prompted on-screen type 'h' to play as the host
+
+**If hosting on Windows**, there a couple of things to keep in mind:
+- The first time you play as host, you will get a popup asking if you want the program to communicate over public and private networks. **Click Allow**. If you fail to do this, you will have to manually add a Windows Defender firewall inbound rule to allow TCP on port 5555.
+- If the game fails unexpectedly, you might into the following error next time you attempt to host: `SERVER: Failed to bind server [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions`. This means that the port was not properly closed from the last game session. To rectify this, do the following from an **administrator** powershell terminal:
+    - Run: `netstat -ano | findstr :5555`. Look for the last 4 numbers in the output that follows. These numbers represent the PID.
+    - Run: `taskkill /PID 0000 /F`. Replace *0000* with the PID from the last step.
+
+### Client Instructions
+
+1. Navigate to the *type-race* directory (`cd type-racer`)
+2. In the terminal, run `python main.py` to launch the game
+3. When prompted on-screen type 'c' to play as the client
+4. Enter the IP address displayed on the **host's** screen when prompted

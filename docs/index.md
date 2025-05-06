@@ -24,3 +24,16 @@ To push ourselves, we also wanted to make our project feature a multiplayer game
 - Customizable GUI through editing `model/gui.py`
 
 # Video
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/DYhtCqgXzgE" 
+frameborder="0" 
+allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
+# Screenshots
+
+Single Player Game of type-race
+![single player game](assets/single_player1.png)
+
+Mistakes are highlighted in red
+![mistake](assets/mistake.png)
