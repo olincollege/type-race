@@ -1,5 +1,5 @@
 # type-race
-[Website]() | [Video]()
+[Website](https://olincollege.github.io/type-race/)
 
 # Project Summary
 
