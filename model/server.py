@@ -10,6 +10,7 @@ import platform
 import subprocess
 import sys
 import os
+
 PORT = 5555
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -47,7 +48,6 @@ class Network(ABC):
                 print("SERVER: No data received, close connection")
                 break
 
-            print(f"My {my_wpm} Opponent {opponent_wpm}")
             if self._player.game_over:
                 print("SERVER: Game ended, close connection (player.game_over)")
                 break
@@ -76,8 +76,14 @@ class Host(Network):
         Return a string containing the IPv4 address. The address consists of a
         set of 4 numbers, separated by periods.
         """
-        if "microsoft" in platform.uname().release.lower() or "wsl" in platform.release().lower():
-            print("🚫 WSL detected — use host mode from macOS, Windows, or Linux instead.")
+        if (
+            "microsoft" in platform.uname().release.lower()
+            or "wsl" in platform.release().lower()
+        ):
+            print(
+                "🚫 WSL detected — use host mode from macOS, Windows, or Linux"
+                " instead."
+            )
             return "127.0.0.1"
 
         system = platform.system()
@@ -85,7 +91,11 @@ class Host(Network):
         # --- macOS ---
         if system == "Darwin":
             try:
-                result = subprocess.run(["ipconfig", "getifaddr", "en0"], capture_output=True, text=True)
+                result = subprocess.run(
+                    ["ipconfig", "getifaddr", "en0"],
+                    capture_output=True,
+                    text=True,
+                )
                 ip = result.stdout.strip()
                 if ip:
                     print(f"🟢 macOS detected. Wi-Fi IP: {ip}")
@@ -107,7 +117,9 @@ class Host(Network):
         # --- Linux (non-WSL) ---
         elif system == "Linux":
             try:
-                result = subprocess.run(["hostname", "-I"], capture_output=True, text=True)
+                result = subprocess.run(
+                    ["hostname", "-I"], capture_output=True, text=True
+                )
                 ip_list = result.stdout.strip().split()
                 for ip in ip_list:
                     if not ip.startswith("127."):
