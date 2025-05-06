@@ -52,6 +52,12 @@ Two laptops are required to play type-race multiplayer. One player will serve as
 2. In the terminal, run `python main.py` to launch the game
 3. When prompted on-screen type 'h' to play as the host
 
+**If hosting on Windows**, there a couple of things to keep in mind:
+- The first time you play as host, you will get a popup asking if you want the program to communicate over public and private networks. **Click Allow**. If you fail to do this, you will have to manually add a Windows Defender firewall inbound rule to allow TCP on port 5555.
+- If the game fails unexpectedly, you might into the following error next time you attempt to host: `SERVER: Failed to bind server [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions`. This means that the port was not properly closed from the last game session. To rectify this, do the following from an **administrator** powershell terminal:
+    - Run: `netstat -ano | findstr :5555`. Look for the last 4 numbers in the output that follows. These numbers represent the PID.
+    - Run: `taskkill /PID 0000 /F`. Replace *0000* with the PID from the last step.
+
 ### Client Instructions
 
 1. Navigate to the *type-race* directory (`cd type-racer`)
